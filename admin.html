@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VetAppoint Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="admin-shell">
+
+  <aside class="admin-sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="20" fill="#EAF1FF"/>
+        <path d="M20 26c-4.5 0-8-2.2-8-5.6 0-2 1.7-3 3-4.4 1-1.1 1.6-2.4 3-2.4s2 1.3 3 2.4c1.3 1.4 3 2.4 3 4.4 0 3.4-3.5 5.6-8 5.6Z" fill="#2454E8"/>
+        <ellipse cx="13.5" cy="14" rx="1.8" ry="2.3" fill="#2454E8"/>
+        <ellipse cx="17.3" cy="11" rx="1.8" ry="2.3" fill="#2454E8"/>
+        <ellipse cx="22.7" cy="11" rx="1.8" ry="2.3" fill="#2454E8"/>
+        <ellipse cx="26.5" cy="14" rx="1.8" ry="2.3" fill="#2454E8"/>
+      </svg>
+      <span class="brand-text">VetAppoint <span style="color:var(--color-text-faint); font-weight:600; font-size:13px;">Admin</span></span>
+    </div>
+
+    <nav class="admin-nav" id="adminNav">
+      <button data-tab="dashboard" class="active">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></svg>
+        <span class="nav-text">Dashboard</span>
+      </button>
+      <button data-tab="appointments">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18" stroke-linecap="round"/></svg>
+        <span class="nav-text">Appointments</span>
+        <span class="nav-badge" id="badgeAppointments"></span>
+      </button>
+      <button data-tab="records">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14c0-4 3.6-9 8-9s8 5 8 9-3.6 6-8 6-8-2-8-6Z"/></svg>
+        <span class="nav-text">Patient records</span>
+      </button>
+      <button data-tab="summary">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h10a1 1 0 0 1 1 1v16l-6-3-6 3V4a1 1 0 0 1 1-1Z"/></svg>
+        <span class="nav-text">Patient summary</span>
+      </button>
+      <button data-tab="vaccination">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="3" width="10" height="6" rx="1"/><path d="M9 9v10a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V9M5 13h4m6 0h4" stroke-linecap="round"/></svg>
+        <span class="nav-text">Vaccination</span>
+      </button>
+    </nav>
+
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- ============ DASHBOARD ============ -->
+    <section class="tab-panel active" id="tab-dashboard">
+      <div class="admin-topbar">
+        <h1>Dashboard</h1>
+        <span class="today"><span class="live-dot"></span>Live · <span id="todayLabel"></span></span>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Total animals</div><div class="stat-value" id="statAnimals">0</div></div>
+        <div class="stat-card accent"><div class="stat-label">Appointments today</div><div class="stat-value" id="statAppointments">0</div></div>
+        <div class="stat-card"><div class="stat-label">Cancellations today</div><div class="stat-value" id="statCancelled">0</div></div>
+        <div class="stat-card"><div class="stat-label">Completed today</div><div class="stat-value" id="statDone">0</div></div>
+        <div class="stat-card"><div class="stat-label">Upcoming vaccinations</div><div class="stat-value" id="statVax">0</div></div>
+      </div>
+      <p class="reset-note">Appointments, cancellations and completed counts reflect today only and reset automatically each new day. Full history is kept in Patient Summary.</p>
+    </section>
+
+    <!-- ============ APPOINTMENTS ============ -->
+    <section class="tab-panel" id="tab-appointments">
+      <div class="admin-topbar">
+        <h1>Appointments</h1>
+        <span class="today">Accept or reject incoming requests</span>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-head">
+          <h3>Pending requests</h3>
+          <span class="count" id="countPending">0 requests</span>
+        </div>
+        <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Owner</th><th>Animal</th><th>Species</th><th>Type</th><th>Date &amp; time</th><th>Contact</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="appointmentsBody"></tbody>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PATIENT RECORDS ============ -->
+    <section class="tab-panel" id="tab-records">
+      <div class="admin-topbar">
+        <h1>Patient records</h1>
+        <span class="today">Currently accepted patients</span>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-head">
+          <h3>Active patients</h3>
+          <span class="count" id="countRecords">0 patients</span>
+        </div>
+        <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Animal</th><th>Type</th><th>Age</th><th>Breed</th><th>Species</th><th>Gender</th><th>Weight</th><th>Color</th><th>Owner</th><th>Contact</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="recordsBody"></tbody>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PATIENT SUMMARY ============ -->
+    <section class="tab-panel" id="tab-summary">
+      <div class="admin-topbar">
+        <h1>Patient summary</h1>
+        <span class="today">Full history of completed and cancelled appointments</span>
+      </div>
+      <div class="panel-card">
+        <div class="panel-card-head">
+          <h3>All records</h3>
+          <div class="filter-bar">
+            <span class="count" id="countSummary">0 patients</span>
+            <select id="summaryFilter">
+              <option value="all">All statuses</option>
+              <option value="Done">Done</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Animal</th><th>Owner</th><th>Contact</th><th>Type</th><th>Status</th><th>Date</th><th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="summaryBody"></tbody>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VACCINATION ============ -->
+    <section class="tab-panel" id="tab-vaccination">
+      <div class="admin-topbar">
+        <h1>Vaccination</h1>
+        <span class="today">Set next schedules — owners are notified automatically</span>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-card-head">
+          <h3>Schedule a vaccination</h3>
+        </div>
+        <div class="mini-form">
+          <select id="vaxAnimalSelect"><option value="">Select animal…</option></select>
+          <select id="vaxVaccineType"><option value="">Select animal first</option></select>
+          <input type="date" id="vaxNextDate" />
+          <button id="scheduleVaxBtn" class="btn btn-primary btn-sm" type="button">Set &amp; notify owner</button>
+        </div>
+        <div class="vax-info" id="vaxApptInfo">Select an animal to see the date the owner booked.</div>
+      </div>
+
+      <div class="vax-tables">
+        <div class="panel-card" style="margin-top:0;">
+          <div class="panel-card-head"><h3>Scheduled vaccination for Dogs</h3></div>
+          <div class="table-scroll">
+          <table>
+            <thead><tr><th>Animal</th><th>Owner</th><th>Vaccine</th><th>First scheduled</th><th>Next date</th></tr></thead>
+            <tbody id="vaxDogBody"></tbody>
+          </table>
+          </div>
+        </div>
+        <div class="panel-card" style="margin-top:0;">
+          <div class="panel-card-head"><h3>Scheduled vaccination for Cats</h3></div>
+          <div class="table-scroll">
+          <table>
+            <thead><tr><th>Animal</th><th>Owner</th><th>Vaccine</th><th>First scheduled</th><th>Next date</th></tr></thead>
+            <tbody id="vaxCatBody"></tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
